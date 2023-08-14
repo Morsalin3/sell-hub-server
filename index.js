@@ -48,11 +48,27 @@ async function run() {
 
     });
 
-    app.post('/card', async(req, res) =>{
+    app.post('/cards', async(req, res) =>{
       const card = req.body;
       const result = await cardsCollection.insertOne(card);
       res.send(result); 
+    });
+
+
+    app.get('/cards', async(req, res) =>{
+      const card = cardsCollection.find();
+      const result = await card.toArray()
+      res.send(result); 
     })
+
+    app.delete('/cards/:id', async(req, res) =>{
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const result = await cardsCollection.deleteOne(filter);
+      res.send(result); 
+    })
+
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
